@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="traincenterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Atleti">
+          <Key>
+            <PropertyRef Name="AtletaID" />
+          </Key>
+          <Property Name="AtletaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Cognome" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="peso" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="DataDiNascita" Type="datetime" />
+          <Property Name="Altezza" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Foto" Type="image" />
+        </EntityType>
+        <EntityType Name="Sedute">
+          <Key>
+            <PropertyRef Name="SedutaID" />
+          </Key>
+          <Property Name="SedutaID" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Data" Type="date" Nullable="false" />
+          <Property Name="OraInizio" Type="time" Precision="1" Nullable="false" />
+          <Property Name="OraFine" Type="time" Precision="1" Nullable="false" />
+          <Property Name="SportID" Type="nchar" MaxLength="20" />
+          <Property Name="AtletaID" Type="int" />
+        </EntityType>
+        <EntityType Name="Sports">
+          <Key>
+            <PropertyRef Name="SportID" />
+          </Key>
+          <Property Name="SportID" Type="nchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Sedute_Atleti">
+          <End Role="Atleti" Type="Self.Atleti" Multiplicity="0..1" />
+          <End Role="Sedute" Type="Self.Sedute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Atleti">
+              <PropertyRef Name="AtletaID" />
+            </Principal>
+            <Dependent Role="Sedute">
+              <PropertyRef Name="AtletaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sedute_Sports">
+          <End Role="Sedute" Type="Self.Sedute" Multiplicity="1" />
+          <End Role="Sedute1" Type="Self.Sedute" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Sedute">
+              <PropertyRef Name="SedutaID" />
+            </Principal>
+            <Dependent Role="Sedute1">
+              <PropertyRef Name="SedutaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="traincenterModelStoreContainer">
+          <EntitySet Name="Atleti" EntityType="Self.Atleti" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sedute" EntityType="Self.Sedute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sports" EntityType="Self.Sports" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Sedute_Atleti" Association="Self.FK_Sedute_Atleti">
+            <End Role="Atleti" EntitySet="Atleti" />
+            <End Role="Sedute" EntitySet="Sedute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sedute_Sports" Association="Self.FK_Sedute_Sports">
+            <End Role="Sedute" EntitySet="Sedute" />
+            <End Role="Sedute1" EntitySet="Sedute" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="traincenterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Atleti">
+          <Key>
+            <PropertyRef Name="AtletaID" />
+          </Key>
+          <Property Name="AtletaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cognome" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="peso" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="DataDiNascita" Type="DateTime" Precision="3" />
+          <Property Name="Altezza" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Foto" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Sedute" Relationship="Self.FK_Sedute_Atleti" FromRole="Atleti" ToRole="Sedute" />
+        </EntityType>
+        <EntityType Name="Sedute">
+          <Key>
+            <PropertyRef Name="SedutaID" />
+          </Key>
+          <Property Name="SedutaID" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OraInizio" Type="Time" Nullable="false" Precision="1" />
+          <Property Name="OraFine" Type="Time" Nullable="false" Precision="1" />
+          <Property Name="SportID" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="AtletaID" Type="Int32" />
+          <NavigationProperty Name="Atleti" Relationship="Self.FK_Sedute_Atleti" FromRole="Sedute" ToRole="Atleti" />
+          <NavigationProperty Name="Sedute1" Relationship="Self.FK_Sedute_Sports" FromRole="Sedute" ToRole="Sedute1" />
+          <NavigationProperty Name="Sedute2" Relationship="Self.FK_Sedute_Sports" FromRole="Sedute1" ToRole="Sedute" />
+        </EntityType>
+        <EntityType Name="Sports">
+          <Key>
+            <PropertyRef Name="SportID" />
+          </Key>
+          <Property Name="SportID" Type="String" MaxLength="5" FixedLength="true" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Sedute_Atleti">
+          <End Role="Atleti" Type="Self.Atleti" Multiplicity="0..1" />
+          <End Role="Sedute" Type="Self.Sedute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Atleti">
+              <PropertyRef Name="AtletaID" />
+            </Principal>
+            <Dependent Role="Sedute">
+              <PropertyRef Name="AtletaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sedute_Sports">
+          <End Role="Sedute" Type="Self.Sedute" Multiplicity="1" />
+          <End Role="Sedute1" Type="Self.Sedute" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Sedute">
+              <PropertyRef Name="SedutaID" />
+            </Principal>
+            <Dependent Role="Sedute1">
+              <PropertyRef Name="SedutaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="myTraincenterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Atleti" EntityType="Self.Atleti" />
+          <EntitySet Name="Sedute" EntityType="Self.Sedute" />
+          <EntitySet Name="Sports" EntityType="Self.Sports" />
+          <AssociationSet Name="FK_Sedute_Atleti" Association="Self.FK_Sedute_Atleti">
+            <End Role="Atleti" EntitySet="Atleti" />
+            <End Role="Sedute" EntitySet="Sedute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sedute_Sports" Association="Self.FK_Sedute_Sports">
+            <End Role="Sedute" EntitySet="Sedute" />
+            <End Role="Sedute1" EntitySet="Sedute" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="traincenterModelStoreContainer" CdmEntityContainer="myTraincenterEntities">
+          <EntitySetMapping Name="Atleti">
+            <EntityTypeMapping TypeName="traincenterModel.Atleti">
+              <MappingFragment StoreEntitySet="Atleti">
+                <ScalarProperty Name="AtletaID" ColumnName="AtletaID" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Cognome" ColumnName="Cognome" />
+                <ScalarProperty Name="peso" ColumnName="peso" />
+                <ScalarProperty Name="DataDiNascita" ColumnName="DataDiNascita" />
+                <ScalarProperty Name="Altezza" ColumnName="Altezza" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sedute">
+            <EntityTypeMapping TypeName="traincenterModel.Sedute">
+              <MappingFragment StoreEntitySet="Sedute">
+                <ScalarProperty Name="SedutaID" ColumnName="SedutaID" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="OraInizio" ColumnName="OraInizio" />
+                <ScalarProperty Name="OraFine" ColumnName="OraFine" />
+                <ScalarProperty Name="SportID" ColumnName="SportID" />
+                <ScalarProperty Name="AtletaID" ColumnName="AtletaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sports">
+            <EntityTypeMapping TypeName="traincenterModel.Sports">
+              <MappingFragment StoreEntitySet="Sports">
+                <ScalarProperty Name="SportID" ColumnName="SportID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
